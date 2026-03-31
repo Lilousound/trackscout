@@ -1,7 +1,11 @@
+import Header from './components/header'
+import SearchBar from './components/SearchBar'
+
 function App() {
   return (
     <div >
-      <h1 className="text-3xl text-blue-800 text-center">TrackScout</h1>
+      <Header/>
+      <SearchBar />
     </div>
   );
 }
