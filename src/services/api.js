@@ -1,6 +1,8 @@
 export const searchTracks = async (query) => {
-  const queryCleaned = encodeURIComponent(query); // Clean the query to make it URL-safe
-  const response = await fetch(`https://api.deezer.com/search?q=${queryCleaned}`);
-  const data = await response.json();
-  return data.data;
-};
+  const queryCleaned = encodeURIComponent(query)
+  const response = await fetch(
+    `https://itunes.apple.com/search?term=${queryCleaned}&media=music`,
+  )
+  const data = await response.json()
+  return data.results
+}
