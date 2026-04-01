@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { searchTracks } from './services/api'
-import Header from './components/header'
+import Header from './components/Header'
 import SearchBar from './components/SearchBar'
 import TracksList from './components/TracksList'
 
