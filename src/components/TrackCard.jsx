@@ -1,7 +1,16 @@
 function TrackCard({ track }) {
   console.log(track)
   const date = new Date(track.releaseDate)
-  const year = date.getFullYear()
+  const year = track.album.release_date
+    ? track.album.release_date.split('-')[0]
+    : 'Inconnu'
+
+  // Fonction pour convertir les secondes en mm:ss
+  const formatDuration = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = String(seconds % 60).padStart(2, '0') // Ajoute un 0 si < 10
+    return `${mins}:${secs}`
+  }
 
   const handlePlay = (previewUrl) => {
     const audio = new Audio(previewUrl)
@@ -13,8 +22,14 @@ function TrackCard({ track }) {
       {/* col gauche */}
       <div className="flex flex-col justify-between w-1/2 ml-2 mt-2">
         <div className="flex flex-col gap-2.5">
-          <h3 className="font-bold text-blue-50 text-lg">{track.trackName}</h3>
-          <p className="font-medium text-gray-200 italic">{track.artistName}</p>
+          <h3 className="font-bold text-blue-50 text-lg">{track.title}</h3>
+          <p className="font-medium text-gray-200">{track.artist.name}</p>
+          <p className="font-light text-gray-200 italic">
+            Album: {track.album.title}
+          </p>
+          <p className="font-light text-gray-200 italic">
+            Duration: {formatDuration(track.duration)}
+          </p>
         </div>
 
         <p className="text-sm text-gray-400">{year}</p>
@@ -23,13 +38,13 @@ function TrackCard({ track }) {
       {/* col droite */}
       <div className="w-1/2 flex flex-col items-center justify-around">
         <img
-          src={track.artworkUrl100}
+          src={track.album.cover_big}
           alt="Track Artwork"
           className="w-40 h-40 rounded-md object-cover shadow-md "
         />
 
         <button
-          onClick={() => handlePlay(track.previewUrl)}
+          onClick={() => handlePlay(track.preview)}
           className="relative mt-5 p-2 rounded-full bg-blue-800/80 hover:bg-blue-800 transition-colors duration-200 shadow-md hover:shadow-blue-400/50"
         >
           <img
