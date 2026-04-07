@@ -38,7 +38,7 @@ function TrackCard({ track, onPlay, currentTrackId, isPlaying }) {
 
         <button
           onClick={() => onPlay(track.id, track.preview)}
-          className="relative mt-5 p-2 rounded-full bg-blue-800/80 hover:bg-blue-800 transition-colors duration-200 shadow-md hover:shadow-blue-400/50"
+          className="relative mt-5 p-2 rounded-full bg-blue-950 hover:bg-blue-900 transition-colors duration-200 shadow-md hover:shadow-blue-800/50"
         >
           <img
             src={
