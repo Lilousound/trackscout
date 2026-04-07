@@ -8,16 +8,16 @@ app.use(cors())
 
 app.get('/api/search', async (req, res) => {
   try {
-    const { query } = req.query
-    if (!query) {
-      return res.status(400).json({ error: "Le paramètre 'query' est requis." })
+    const { q } = req.query // Change "query" en "q"
+    if (!q) {
+      return res.status(400).json({ error: "Le paramètre 'q' est requis." })
     }
 
     const response = await fetch(
-      `https://api.deezer.com/search?q=${encodeURIComponent(query)}`,
+      `https://api.deezer.com/search?q=${encodeURIComponent(q)}`,
     )
     const data = await response.json()
-    res.json(data) // Renvoie les données brutes de Deezer
+    res.json(data)
   } catch (error) {
     res.status(500).json({ error: 'Erreur interne', details: error.message })
   }

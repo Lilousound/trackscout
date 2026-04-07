@@ -3,6 +3,7 @@ import { searchTracks } from './services/api'
 import Header from './components/Header'
 import SearchBar from './components/SearchBar'
 import TracksList from './components/TracksList'
+import LearnMore from './components/LearnMore'
 
 function App() {
   const [query, setQuery] = useState('')
@@ -47,6 +48,7 @@ function App() {
         currentTrackId={currentTrackId}
         isPlaying={isPlaying}
       />
+      <LearnMore />
     </div>
   )
 }
