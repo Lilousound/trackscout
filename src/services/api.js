@@ -2,18 +2,36 @@
 export const searchTracks = async (query) => {
   try {
     const queryCleaned = encodeURIComponent(query)
-    console.log('Front-end: Recherche pour:', queryCleaned)
-    const response = await fetch(
-      `http://localhost:3001/api/search?query=${queryCleaned}`,
-    )
+    console.log('Recherche pour:', queryCleaned)
+
+    const apiUrl = import.meta.env.VITE_API_BASE_URL
+    let response
+
+    if (apiUrl.includes('localhost')) {
+      // Mode local : appelle ton serveur Node.js
+      response = await fetch(`${apiUrl}/search?query=${queryCleaned}`)
+    } else {
+      // Mode production : appelle directement Deezer
+      response = await fetch(`${apiUrl}/search?q=${queryCleaned}`)
+    }
+
     if (!response.ok) {
       const errorText = await response.text()
       throw new Error(`Erreur : ${response.status} - ${errorText}`)
     }
+
     const data = await response.json()
-    return data.data || [] // <-- Change ici : Deezer utilise `data.data`
+
+    // Normalise les données pour toujours renvoyer un tableau
+    if (apiUrl.includes('localhost')) {
+      // En local, ton serveur renvoie probablement { data: [...] }
+      return data.data || []
+    } else {
+      // En production, Deezer renvoie { data: [...] }
+      return data.data || []
+    }
   } catch (error) {
     console.error('Erreur dans searchTracks :', error)
-    throw error
+    return [] // Renvoie un tableau vide en cas d'erreur
   }
 }

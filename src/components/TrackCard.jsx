@@ -1,7 +1,5 @@
-function TrackCard({ track }) {
-  console.log(track)
-  const date = new Date(track.releaseDate)
-  const year = track.album.release_date
+function TrackCard({ track, onPlay, currentTrackId, isPlaying }) {
+  const year = track.album?.release_date
     ? track.album.release_date.split('-')[0]
     : 'Inconnu'
 
@@ -13,8 +11,24 @@ function TrackCard({ track }) {
   }
 
   const handlePlay = (previewUrl) => {
-    const audio = new Audio(previewUrl)
+    if (track.id === currentTrackId && isPlaying) {
+      // C'est le même track et il joue → pause
+      audioRef.current.pause()
+      setIsPlaying(false)
+      return
+    }
+
+    // si c'est un track différent OU c'est le même mais paused → lance la lecture
+    if (audioRef.current) {
+      audioRef.current.pause()
+    }
+
+    const audio = new Audio(previewUrl) // Crée un nouvel objet Audio
     audio.play()
+
+    audioRef.current = audio // Stocke la référence pour pouvoir la stopper plus tard
+    setCurrentTrackId(track.id)
+    setIsPlaying(true)
   }
 
   return (
@@ -44,12 +58,12 @@ function TrackCard({ track }) {
         />
 
         <button
-          onClick={() => handlePlay(track.preview)}
+          onClick={() => onPlay(track.id, track.preview)}
           className="relative mt-5 p-2 rounded-full bg-blue-800/80 hover:bg-blue-800 transition-colors duration-200 shadow-md hover:shadow-blue-400/50"
         >
           <img
-            src="./play-button.png"
-            alt="Play"
+            src={isPlaying ? './stop-button.png' : './play-button.png'}
+            alt={isPlaying ? 'Stop' : 'Play'}
             className="w-12 h-12 brightness-100"
           />
           {/* Effet de surbrillance au survol */}
