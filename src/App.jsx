@@ -7,8 +7,6 @@ import TracksList from './components/TracksList'
 function App() {
   const [query, setQuery] = useState('')
   const [tracks, setTracks] = useState([])
-  // const [loading, setLoading] = useState(false)
-  // const [error, setError] = useState(null)
   const audioRef = useRef(null)
   const [currentTrackId, setCurrentTrackId] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -16,22 +14,22 @@ function App() {
   const handleSearch = async () => {
     const results = await searchTracks(query)
     setTracks(results)
-    console.log(tracks)
   }
 
   const handlePlay = (trackId, previewUrl) => {
     if (trackId === currentTrackId && isPlaying) {
-      // Pause
+      // Si c'est le même track et qu'il est en lecture → pause
       audioRef.current.pause()
       setIsPlaying(false)
       return
     }
 
-    // Arrête l'ancien et lance le nouveau
+    // Arrête l'ancien track s'il existe
     if (audioRef.current) {
       audioRef.current.pause()
     }
 
+    // Lance le nouveau track
     const audio = new Audio(previewUrl)
     audio.play()
     audioRef.current = audio
