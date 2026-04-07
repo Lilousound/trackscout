@@ -4,6 +4,7 @@ import Header from './components/Header'
 import SearchBar from './components/SearchBar'
 import TracksList from './components/TracksList'
 import LearnMore from './components/LearnMore'
+import Footer from './components/Footer'
 
 function App() {
   const [query, setQuery] = useState('')
@@ -49,6 +50,7 @@ function App() {
         isPlaying={isPlaying}
       />
       <LearnMore />
+      <Footer />
     </div>
   )
 }

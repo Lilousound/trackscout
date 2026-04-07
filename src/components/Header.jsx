@@ -17,9 +17,7 @@ export default function Header() {
       </p>
 
       {/* Subtle extra line (micro-copy) */}
-      <p className="mt-3 text-lg text-blue-300">
-        Instant music discovery. No friction.
-      </p>
+      <p className="mt-3 text-lg text-blue-300">Instant music discovery.</p>
     </header>
   )
 }

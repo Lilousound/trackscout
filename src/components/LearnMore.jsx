@@ -38,7 +38,9 @@ export default function LearnMore() {
 
           <li>
             <span className="font-semibold text-white">Quick previews</span>
-            <p className="text-blue-200 text-xs">Listen before you commit</p>
+            <p className="text-blue-200 text-xs">
+              Listen to preview of the track
+            </p>
           </li>
 
           <li>
