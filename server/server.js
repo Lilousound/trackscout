@@ -20,14 +20,40 @@ app.get('/api/deezer', async (req, res) => {
   }
 
   try {
-    const response = await fetch(
+    // 1. Appel initial à Deezer pour chercher les titres
+    const searchResponse = await fetch(
       `https://api.deezer.com/search?q=${encodeURIComponent(q)}`,
     )
-    const data = await response.json()
-    res.status(200).json(data) // Renvoie les données brutes de Deezer
+    const searchData = await searchResponse.json()
+
+    // 2. Enrichissement des données avec release_date
+    const tracksWithAlbumDate = await Promise.all(
+      searchData.data.map(async (track) => {
+        if (track.album?.id) {
+          // Appel à /album/{id} pour récupérer release_date
+          const albumResponse = await fetch(
+            `https://api.deezer.com/album/${track.album.id}`,
+          )
+          const albumData = await albumResponse.json()
+
+          // Fusion des données
+          return {
+            ...track,
+            album: {
+              ...track.album,
+              release_date: albumData.release_date, // Ajoute la date de sortie
+            },
+          }
+        }
+        return track
+      }),
+    )
+
+    // 3. Renvoie les données enrichies
+    res.status(200).json({ data: tracksWithAlbumDate })
   } catch (error) {
     console.error('Erreur dans /api/deezer:', error)
-    res.status(500).json({ error: 'Erreur API Deezer' })
+    res.status(500).json({ error: 'Erreur API Deezer', details: error.message })
   }
 })
 
