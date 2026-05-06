@@ -43,8 +43,8 @@ function TrackCard({ track, onPlay, currentTrackId, isPlaying }) {
           <img
             src={
               track.id === currentTrackId && isPlaying
-                ? './stop-button.png'
-                : './play-button.png'
+                ? '/stop-button.png'
+                : '/play-button.png'
             }
             alt={track.id === currentTrackId && isPlaying ? 'Stop' : 'Play'}
             className="w-12 h-12 brightness-100"

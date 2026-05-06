@@ -1,8 +1,7 @@
-// src/services/api.js
 const API_BASE_URL =
   import.meta.env.MODE === 'development'
-    ? 'http://localhost:3001/api/search' // En local : utilise ton serveur Node.js
-    : '/api/deezer' // En production : appelle Deezer directement
+    ? 'http://localhost:3001/api/deezer' // En local : Node.js
+    : '/api/deezer' // En production : Vercel
 
 export const searchTracks = async (query) => {
   try {
