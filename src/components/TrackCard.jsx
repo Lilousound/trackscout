@@ -24,6 +24,9 @@ function TrackCard({ track, onPlay, currentTrackId, isPlaying }) {
         </div>
 
         <p className="text-blue-300/80 text-sm">
+          Release Date: {track.album.release_date}
+        </p>
+        <p className="text-blue-300/80 text-sm">
           Duration: {formatDuration(track.duration)}
         </p>
       </div>
@@ -31,14 +34,16 @@ function TrackCard({ track, onPlay, currentTrackId, isPlaying }) {
       {/* Colonne droite */}
       <div className="w-1/2 flex flex-col items-center justify-between">
         <img
-          src={track.album.cover_big}
+          src={track.album.cover_xl}
           alt="Track Artwork"
           className="w-36 h-36 rounded-lg object-cover shadow-md"
         />
 
         <button
           onClick={() => onPlay(track.id, track.preview)}
-          className="relative mt-5 p-2 rounded-full bg-blue-950 hover:bg-blue-900 transition-colors duration-200 shadow-md hover:shadow-blue-800/50"
+          className={`relative mt-5 p-2 rounded-full bg-blue-950 hover:bg-blue-900 transition-all duration-200 shadow-md hover:shadow-blue-800/50 ${
+            track.id === currentTrackId && isPlaying ? 'animate-pulse' : ''
+          }`}
         >
           <img
             src={
@@ -49,7 +54,6 @@ function TrackCard({ track, onPlay, currentTrackId, isPlaying }) {
             alt={track.id === currentTrackId && isPlaying ? 'Stop' : 'Play'}
             className="w-12 h-12 brightness-100"
           />
-          <div className="absolute inset-0 rounded-full opacity-0 hover:opacity-5 bg-white transition duration-300"></div>{' '}
         </button>
       </div>
     </div>
