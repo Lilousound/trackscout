@@ -1,8 +1,4 @@
 function TrackCard({ track, onPlay, currentTrackId, isPlaying }) {
-  const year = track.album?.release_date
-    ? track.album.release_date.split('-')[0]
-    : 'Inconnu'
-
   // Fonction pour convertir les secondes en mm:ss
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60)
