@@ -1,6 +1,6 @@
 import TrackCard from './TrackCard'
 
-function TracksList({ tracks, onPlay, currentTrackId, isPlaying }) {
+function TracksList({ tracks, onPlay, currentTrackId, isPlaying, lyrics }) {
   return (
     <div className="flex flex-col justify-center items-center mb-2">
       {tracks.map((track) => (
@@ -10,6 +10,7 @@ function TracksList({ tracks, onPlay, currentTrackId, isPlaying }) {
           onPlay={onPlay}
           currentTrackId={currentTrackId}
           isPlaying={isPlaying}
+          lyrics={lyrics}
         />
       ))}
     </div>

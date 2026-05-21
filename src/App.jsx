@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
-import { searchTracks } from './services/api'
+import { searchTracks } from './services/api.js'
+import { getLyrics } from '../lib/lyrics.js'
 import Header from './components/Header'
 import SearchBar from './components/SearchBar'
 import TracksList from './components/TracksList'
@@ -9,6 +10,7 @@ import Footer from './components/Footer'
 function App() {
   const [query, setQuery] = useState('')
   const [tracks, setTracks] = useState([])
+  const [lyrics, setLyrics] = useState([])
   const audioRef = useRef(null)
   const [currentTrackId, setCurrentTrackId] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -16,6 +18,8 @@ function App() {
   const handleSearch = async () => {
     const results = await searchTracks(query)
     setTracks(results)
+    const lyrics = await fetchLyrics(query)
+    setLyrics(lyrics)
   }
 
   const handlePlay = (trackId, previewUrl) => {
@@ -48,6 +52,7 @@ function App() {
         onPlay={handlePlay}
         currentTrackId={currentTrackId}
         isPlaying={isPlaying}
+        lyrics={lyrics}
       />
       <LearnMore />
       <Footer />
