@@ -25,7 +25,7 @@ function TrackCard({ track, onPlay, currentTrackId, isPlaying, lyrics }) {
         <p className="text-blue-300/80 text-sm">
           Duration: {formatDuration(track.duration)}
         </p>
-        <p className="text-blue-300/80 text-sm">Lyrics: {lyrics}</p>
+        {/* <p className="text-blue-300/80 text-sm">Lyrics: {lyrics}</p> */}
       </div>
 
       {/* Colonne droite */}

@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { searchTracks } from './services/api.js'
-import { getLyrics } from '../lib/lyrics.js'
+
 import Header from './components/Header'
 import SearchBar from './components/SearchBar'
 import TracksList from './components/TracksList'
@@ -18,8 +18,10 @@ function App() {
   const handleSearch = async () => {
     const results = await searchTracks(query)
     setTracks(results)
-    const lyrics = await fetchLyrics(query)
-    setLyrics(lyrics)
+    // console.log(results.map((track) => `${track.artist.name} - ${track.title}`)) // Affiche l'artiste et le titre de chaque résultat
+    // const lyrics = await getLyrics(results[0].artist.name, results[0].title)
+    // console.log(lyrics) // Affiche les paroles récupérées
+    // setLyrics(lyrics)
   }
 
   const handlePlay = (trackId, previewUrl) => {
