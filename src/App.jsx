@@ -10,7 +10,6 @@ import Footer from './components/Footer'
 function App() {
   const [query, setQuery] = useState('')
   const [tracks, setTracks] = useState([])
-  const [lyrics, setLyrics] = useState([])
   const audioRef = useRef(null)
   const [currentTrackId, setCurrentTrackId] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -18,10 +17,6 @@ function App() {
   const handleSearch = async () => {
     const results = await searchTracks(query)
     setTracks(results)
-    // console.log(results.map((track) => `${track.artist.name} - ${track.title}`)) // Affiche l'artiste et le titre de chaque résultat
-    // const lyrics = await getLyrics(results[0].artist.name, results[0].title)
-    // console.log(lyrics) // Affiche les paroles récupérées
-    // setLyrics(lyrics)
   }
 
   const handlePlay = (trackId, previewUrl) => {
@@ -45,6 +40,22 @@ function App() {
     setIsPlaying(true)
   }
 
+  //MODAL LYRICS
+  const [modalTrack, setModalTrack] = useState(null) // Track pour laquelle on affiche la modal
+  const [modalLyrics, setModalLyrics] = useState('') // Paroles à afficher
+
+  // Fonction pour ouvrir la modal
+  const openModalWithLyrics = (track, lyrics) => {
+    setModalTrack(track)
+    setModalLyrics(lyrics)
+  }
+
+  // Fonction pour fermer la modal
+  const closeModal = () => {
+    setModalTrack(null)
+    setModalLyrics('')
+  }
+
   return (
     <div className="text-white min-h-screen w-full bg-gradient-to-bl from-blue-950 to-blue-800">
       <Header />
@@ -54,10 +65,41 @@ function App() {
         onPlay={handlePlay}
         currentTrackId={currentTrackId}
         isPlaying={isPlaying}
-        lyrics={lyrics}
+        openModalWithLyrics={openModalWithLyrics}
       />
       <LearnMore />
       <Footer />
+
+      {/* Modal pour les paroles (au niveau racine) */}
+      {modalTrack && (
+        <>
+          {/* Overlay sombre pour toute la page */}
+          <div
+            className="fixed inset-0 z-40 bg-black/70"
+            onClick={closeModal}
+          ></div>
+
+          {/* Modal centrée */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="relative bg-blue-950/90 rounded-xl p-6 max-w-2xl w-full border border-white/20 shadow-lg">
+              <button
+                onClick={closeModal}
+                className="absolute top-2 right-2 text-white/80 hover:text-white text-2xl"
+              >
+                &times;
+              </button>
+              <h3 className="text-white text-xl mb-4">{modalTrack.title}</h3>
+              <div className="text-blue-100/90 text-sm overflow-y-auto max-h-96 pr-4">
+                {modalLyrics
+                  ? modalLyrics
+                      .split('\n')
+                      .map((line, index) => <p key={index}>{line}</p>)
+                  : 'No lyrics available for this track'}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

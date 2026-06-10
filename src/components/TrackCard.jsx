@@ -1,28 +1,51 @@
-function TrackCard({ track, onPlay, currentTrackId, isPlaying, lyrics }) {
+import { getLyrics } from '../services/api.js'
+import { useState } from 'react'
+
+function TrackCard({
+  track,
+  onPlay,
+  currentTrackId,
+  isPlaying,
+  openModalWithLyrics,
+}) {
   // Fonction pour convertir les secondes en mm:ss
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60)
     const secs = String(seconds % 60).padStart(2, '0') // Ajoute un 0 si < 10
     return `${mins}:${secs}`
   }
+
+  // LYRICS
+  // const [lyrics, setLyrics] = useState(null)
+  const handleLyrics = async () => {
+    const response = await getLyrics(track.artist.name, track.title)
+    const lyricsText = response.lyrics || response
+    openModalWithLyrics(track, lyricsText)
+  }
+
   return (
-    <div className="mt-6 w-full max-w-2xl mx-auto border border-white/10 rounded-xl bg-white/5 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-[#8267E8]/30 hover:scale-[1.01] flex gap-4">
+    <div className="mt-6 w-full max-w-4xl mx-auto border border-white/10 rounded-xl bg-white/5 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-[#8267E8]/30 hover:scale-[1.01] flex gap-4">
       {/* Colonne gauche */}
       <div className="flex flex-col justify-between w-1/2">
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-white text-xl leading-tight">
+          <h3 className="font-semibold text-white text-2xl leading-tight">
             {track.title}
           </h3>
 
-          <p className="text-blue-200 text-xl">{track.artist.name}</p>
+          <p className="text-blue-200 text-2xl">{track.artist.name}</p>
 
           <p className="text-blue-300/80 text-sm italic">{track.album.title}</p>
         </div>
-
-        <p className="text-blue-300/80 text-sm">
+        <p className="text-blue-300/80 text-m">
           Release Date: {track.album.release_date}
         </p>
-        <p className="text-blue-300/80 text-sm">
+        <p className="text-blue-100/80 text-sm mt-3">
+          <button onClick={handleLyrics} className="hover:underline italic">
+            Show Lyrics
+          </button>
+        </p>
+
+        <p className="text-blue-300/80 text-sm ">
           Duration: {formatDuration(track.duration)}
         </p>
         {/* <p className="text-blue-300/80 text-sm">Lyrics: {lyrics}</p> */}
