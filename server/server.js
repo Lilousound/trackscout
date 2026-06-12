@@ -30,7 +30,17 @@ app.get('/api/deezer', async (req, res) => {
         `https://api.deezer.com/album/${albumId}`,
       )
       const albumData = await albumResponse.json()
-      albumsReleaseDates[albumId] = albumData.release_date
+      // On récupère la date au format YYYY-MM-DD
+      const originalDate = albumData.release_date
+
+      // On la convertit en DD-MM-YYYY
+      // Si la date est null/undefined, on garde une chaîne vide
+      const formattedDate = originalDate
+        ? originalDate.split('-').reverse().join('-')
+        : ''
+
+      // On stocke la date formatée dans albumsReleaseDates
+      albumsReleaseDates[albumId] = formattedDate
     }
 
     // 4. Ajoute release_date à chaque track
