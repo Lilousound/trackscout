@@ -6,8 +6,6 @@ export default function Header() {
         <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-linear-to-r from-[#E332F6] via-[#8267E8] to-[#61D1DD] text-transparent bg-clip-text">
           TrackScout
         </h1>
-
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-linear-to-r from-white/40 via-white/10 to-transparent transition duration-500"></div>
       </div>
 
       {/* Tagline */}
