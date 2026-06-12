@@ -1,7 +1,13 @@
+import type { DeezerTrack, LyricsResponse } from '../types/deezer'
+
+export interface LyricsResponse {
+  lyrics?: string
+}
+
 const API_BASE_URL =
   import.meta.env.MODE === 'development' ? 'http://localhost:3001/api' : '/api'
 
-export async function searchTracks(query) {
+export async function searchTracks(query: string): Promise<DeezerTrack[]> {
   const res = await fetch(
     `${API_BASE_URL}/deezer?q=${encodeURIComponent(query)}`,
   )
@@ -9,7 +15,10 @@ export async function searchTracks(query) {
   return res.json()
 }
 
-export async function getLyrics(artist, title) {
+export async function getLyrics(
+  artist: string,
+  title: string,
+): Promise<string | LyricsResponse> {
   const res = await fetch(
     `${API_BASE_URL}/lyrics?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`,
   )

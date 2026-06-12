@@ -1,4 +1,13 @@
 import { getLyrics } from '../services/api.js'
+import type { DeezerTrack } from '../types/deezer'
+
+interface TrackCardProps {
+  track: DeezerTrack
+  onPlay: (trackId: number, previewUrl: string) => void
+  currentTrackId: number | null
+  isPlaying: boolean
+  openModalWithLyrics: (track: DeezerTrack, lyrics: string) => void
+}
 
 function TrackCard({
   track,
@@ -6,19 +15,22 @@ function TrackCard({
   currentTrackId,
   isPlaying,
   openModalWithLyrics,
-}) {
+}: TrackCardProps) {
   // Fonction pour convertir les secondes en mm:ss
-  const formatDuration = (seconds) => {
+  const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = String(seconds % 60).padStart(2, '0') // Ajoute un 0 si < 10
     return `${mins}:${secs}`
   }
 
   // LYRICS
-  // const [lyrics, setLyrics] = useState(null)
   const handleLyrics = async () => {
     const response = await getLyrics(track.artist.name, track.title)
-    const lyricsText = response.lyrics || response
+    // Si response est une chaîne, on la garde.
+    // Si response est un objet, on prend response.lyrics ou une chaîne vide.
+    const lyricsText: string =
+      typeof response === 'string' ? response : response.lyrics || ''
+
     openModalWithLyrics(track, lyricsText)
   }
 

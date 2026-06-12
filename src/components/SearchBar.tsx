@@ -1,6 +1,16 @@
 import Button from './Button'
 
-export default function SearchBar({ query, setQuery, onSearch }) {
+interface SearchBarProps {
+  query: string
+  setQuery: (value: string) => void
+  onSearch: () => void
+}
+
+export default function SearchBar({
+  query,
+  setQuery,
+  onSearch,
+}: SearchBarProps) {
   return (
     <div className="text-center mt-10 px-4 mb-8">
       <div className="flex justify-center items-center gap-3 max-w-xl mx-auto">

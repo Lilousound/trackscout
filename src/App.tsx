@@ -1,17 +1,18 @@
 import { useState, useRef } from 'react'
 import { searchTracks } from './services/api.js'
+import type { DeezerTrack } from './types/deezer'
 
-import Header from './components/Header'
-import SearchBar from './components/SearchBar'
-import TracksList from './components/TracksList'
-import LearnMore from './components/LearnMore'
-import Footer from './components/Footer'
+import Header from './components/Header.jsx'
+import SearchBar from './components/SearchBar.jsx'
+import TracksList from './components/TracksList.jsx'
+import LearnMore from './components/LearnMore.jsx'
+import Footer from './components/Footer.jsx'
 
 function App() {
   const [query, setQuery] = useState('')
-  const [tracks, setTracks] = useState([])
-  const audioRef = useRef(null)
-  const [currentTrackId, setCurrentTrackId] = useState(null)
+  const [tracks, setTracks] = useState<DeezerTrack[]>([])
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [currentTrackId, setCurrentTrackId] = useState<number | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
   const handleSearch = async () => {
@@ -19,33 +20,57 @@ function App() {
     setTracks(results)
   }
 
-  const handlePlay = (trackId, previewUrl) => {
-    if (trackId === currentTrackId && isPlaying) {
-      // Si c'est le même track et qu'il est en lecture → pause
+  const handlePlay = (trackId: number, previewUrl: string) => {
+    // 1. Vérifie que previewUrl est valide
+    if (!previewUrl) {
+      console.error('URL de preview invalide ou manquante.')
+      return
+    }
+
+    // 2. Si c'est le même track et qu'il est en lecture → pause
+    if (trackId === currentTrackId && isPlaying && audioRef.current) {
       audioRef.current.pause()
       setIsPlaying(false)
       return
     }
 
-    // Arrête l'ancien track s'il existe
+    // 3. Arrête l'ancien track s'il existe
     if (audioRef.current) {
       audioRef.current.pause()
+      audioRef.current.currentTime = 0 // Réinitialise la position
     }
 
-    // Lance le nouveau track
+    // 4. Crée une nouvelle instance Audio et lance la lecture
     const audio = new Audio(previewUrl)
-    audio.play()
-    audioRef.current = audio
-    setCurrentTrackId(trackId)
-    setIsPlaying(true)
+    audioRef.current = audio // Met à jour la ref
+
+    audio
+      .play()
+      .then(() => {
+        setCurrentTrackId(trackId)
+        setIsPlaying(true)
+      })
+      .catch((error) => {
+        console.error('Erreur de lecture :', error)
+        setIsPlaying(false)
+        audioRef.current = null // Nettoie la ref en cas d'erreur
+      })
+
+    // 5. Nettoyage automatique quand le track change
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+    }
   }
 
   //MODAL LYRICS
-  const [modalTrack, setModalTrack] = useState(null) // Track pour laquelle on affiche la modal
+  const [modalTrack, setModalTrack] = useState<DeezerTrack | null>(null) // Track pour laquelle on affiche la modal
   const [modalLyrics, setModalLyrics] = useState('') // Paroles à afficher
 
   // Fonction pour ouvrir la modal
-  const openModalWithLyrics = (track, lyrics) => {
+  const openModalWithLyrics = (track: DeezerTrack, lyrics: string) => {
     setModalTrack(track)
     setModalLyrics(lyrics)
   }

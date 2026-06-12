@@ -1,4 +1,9 @@
-function Button({ children, onClick }) {
+interface ButtonProps {
+  children: React.ReactNode
+  onClick: () => void
+}
+
+function Button({ children, onClick }: ButtonProps) {
   return (
     <button
       onClick={onClick}
