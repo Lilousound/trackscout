@@ -57,7 +57,7 @@ function App() {
   }
 
   return (
-    <div className="text-white min-h-screen w-full bg-gradient-to-bl from-blue-950 to-blue-800">
+    <div className="text-white min-h-screen w-full bg-linear-to-bl from-blue-950 to-blue-800">
       <Header />
       <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
       <TracksList

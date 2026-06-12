@@ -1,5 +1,4 @@
 import { getLyrics } from '../services/api.js'
-import { useState } from 'react'
 
 function TrackCard({
   track,
