@@ -1,5 +1,6 @@
 import { getLyrics } from '../services/api.js'
 import type { DeezerTrack } from '../types/deezer'
+import { useState } from 'react'
 
 interface TrackCardProps {
   track: DeezerTrack
@@ -22,16 +23,19 @@ function TrackCard({
     const secs = String(seconds % 60).padStart(2, '0') // Ajoute un 0 si < 10
     return `${mins}:${secs}`
   }
+  const [isLoadingLyrics, setIsLoadingLyrics] = useState(false)
 
   // LYRICS
   const handleLyrics = async () => {
-    const response = await getLyrics(track.artist.name, track.title)
-    // Si response est une chaîne, on la garde.
-    // Si response est un objet, on prend response.lyrics ou une chaîne vide.
-    const lyricsText: string =
-      typeof response === 'string' ? response : response.lyrics || ''
-
-    openModalWithLyrics(track, lyricsText)
+    setIsLoadingLyrics(true)
+    try {
+      const response = await getLyrics(track.artist.name, track.title)
+      const lyricsText =
+        typeof response === 'string' ? response : response.lyrics || ''
+      openModalWithLyrics(track, lyricsText)
+    } finally {
+      setIsLoadingLyrics(false)
+    }
   }
 
   return (
@@ -51,8 +55,11 @@ function TrackCard({
           Release Date: {track.album.release_date}
         </p>
         <p className="text-blue-100/80 text-sm mt-3">
-          <button onClick={handleLyrics} className="hover:underline italic">
-            Show Lyrics
+          <button
+            onClick={handleLyrics}
+            className={`hover:underline italic ${isLoadingLyrics ? 'animate-pulse' : ''}`}
+          >
+            {isLoadingLyrics ? 'Loading lyrics...' : 'Show Lyrics'}
           </button>
         </p>
 
